@@ -1,0 +1,4 @@
+.DS_Store
+vendor/
+ca.*
+k8s-ws-exec
