@@ -44,7 +44,6 @@ const (
 	stdin = iota
 	stdout
 	stderr
-	errchain
 )
 
 func WebsocketCallback(c *websocket.Conn) error {
