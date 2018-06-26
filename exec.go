@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/tls"
 	"fmt"
 	"io"
@@ -31,7 +32,7 @@ type WebsocketRoundTripper struct {
 	Callback  RoundTripCallback
 }
 
-var cache string
+var cacheBuff bytes.Buffer
 
 var protocols = []string{
 	"v4.channel.k8s.io",
@@ -52,14 +53,16 @@ func WebsocketCallback(c *websocket.Conn) error {
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
+		buf := make([]byte, 1025)
 		for {
-			buf := make([]byte, 1025)
 			n, err := os.Stdin.Read(buf[1:])
 			if err != nil {
 				errChan <- err
 				return
 			}
-			cache = strings.TrimSpace(string(buf[1 : n+1]))
+
+			cacheBuff.Write(buf[1:n])
+			cacheBuff.Write([]byte{13, 10})
 			if err := c.WriteMessage(websocket.BinaryMessage, buf[:n+1]); err != nil {
 				errChan <- err
 				return
@@ -75,21 +78,27 @@ func WebsocketCallback(c *websocket.Conn) error {
 				errChan <- err
 				return
 			}
-			var w io.Writer
-			switch buf[0] {
-			case stdout:
-				w = os.Stdout
-			case stderr:
-				w = os.Stderr
-			}
 
-			if strings.TrimSpace(string(buf[1:])) != cache {
-				_, err = w.Write(buf)
+			if len(buf) > 1 {
+				var w io.Writer
+				switch buf[0] {
+				case stdout:
+					w = os.Stdout
+				case stderr:
+					w = os.Stderr
+				}
+
+				if w == nil {
+					continue
+				}
+				s := strings.Replace(string(buf[1:]), cacheBuff.String(), "", -1)
+				_, err = w.Write([]byte(s))
 				if err != nil {
 					errChan <- err
 					return
 				}
 			}
+			cacheBuff.Reset()
 		}
 	}()
 
