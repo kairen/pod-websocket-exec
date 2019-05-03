@@ -1,5 +1,5 @@
 ORG := github.com
-OWNER := kairen
+OWNER := kubedev
 REPOPATH ?= $(ORG)/$(OWNER)/k8s-ws-exec
 
 GOOS ?= $(shell go env GOOS)

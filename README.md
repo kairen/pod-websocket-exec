@@ -4,8 +4,8 @@ Learning how to exec a pod via WebSocket writing in Go.
 ## Building
 First clone the repo, and execute `Makefile` using make tool:
 ```sh
-$ git clone https://github.com/kairen/k8s-ws-exec.git $GOPATH/src/github.com/kairen/k8s-ws-exec
-$ cd $GOPATH/src/github.com/kairen/k8s-ws-exec
+$ git clone https://github.com/kubedev/k8s-ws-exec.git $GOPATH/src/github.com/kubedev/k8s-ws-exec
+$ cd $GOPATH/src/github.com/kubedev/k8s-ws-exec
 $ make
 ```
 
