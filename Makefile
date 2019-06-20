@@ -1,6 +1,6 @@
 ORG := github.com
 OWNER := kubedev
-REPOPATH ?= $(ORG)/$(OWNER)/k8s-ws-exec
+REPOPATH ?= $(ORG)/$(OWNER)/websocket-exec
 
 GOOS ?= $(shell go env GOOS)
 
