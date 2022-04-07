@@ -1,5 +1,5 @@
 ORG := github.com
-OWNER := kubedev
+OWNER := kairen
 REPOPATH ?= $(ORG)/$(OWNER)/pod-websocket-exec
 
 GOOS ?= $(shell go env GOOS)
